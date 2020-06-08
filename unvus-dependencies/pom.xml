@@ -68,6 +68,7 @@
                 <artifactId>unvus-framework</artifactId>
                 <version>${unvus-framework.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.github.jhipster</groupId>
                 <artifactId>jhipster-framework</artifactId>
@@ -137,17 +138,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>wonlab-snapshots</id>
-            <url>http://repo.wonlab.com/repository/maven-snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>wonlab-releases</id>
-            <url>http://repo.wonlab.com/repository/maven-releases</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <plugins>
