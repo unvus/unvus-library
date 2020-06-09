@@ -20,7 +20,7 @@
 
     <groupId>com.unvus</groupId>
     <artifactId>unvus-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -56,7 +56,7 @@
     </scm>
 
     <properties>
-        <unvus-framework.version>1.0.0-SNAPSHOT</unvus-framework.version>
+        <unvus-framework.version>1.0.1-SNAPSHOT</unvus-framework.version>
     </properties>
 
     <distributionManagement>
