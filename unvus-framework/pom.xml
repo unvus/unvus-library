@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.unvus</groupId>
         <artifactId>unvus-dependencies</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2</version>
         <relativePath>../unvus-dependencies/pom.xml</relativePath>
     </parent>
 
