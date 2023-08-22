@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.unvus</groupId>
         <artifactId>unvus-dependencies</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>1.5.2</version>
         <relativePath>../unvus-dependencies/pom.xml</relativePath>
     </parent>
 
@@ -218,7 +218,7 @@
             <properties>
                 <sonar.projectKey>com.unvus:unvus-framework</sonar.projectKey>
                 <sonar.projectName>unvus-framework</sonar.projectName>
-                <sonar.projectVersion>1.5.2-SNAPSHOT</sonar.projectVersion>
+                <sonar.projectVersion>1.5.2</sonar.projectVersion>
                 <sonar.host.url>https://sonar.unvus.com</sonar.host.url>
                 <sonar.sources>src/main/</sonar.sources>
                 <sonar.exclusions>src/main/java/com/unvus/config/mybatis/customize/*.*</sonar.exclusions>

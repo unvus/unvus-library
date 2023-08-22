@@ -11,7 +11,7 @@
 
     <groupId>com.unvus</groupId>
     <artifactId>unvus-parent</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <packaging>pom</packaging>
     <name>UnvUS server-side parent POM</name>
     <url>https://unvus.com/</url>
@@ -55,7 +55,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <unvus-framework.version>1.5.2-SNAPSHOT</unvus-framework.version>
+        <unvus-framework.version>1.5.2</unvus-framework.version>
     </properties>
 
     <repositories>
