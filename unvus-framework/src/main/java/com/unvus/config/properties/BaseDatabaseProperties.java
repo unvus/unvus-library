@@ -1,6 +1,7 @@
 package com.unvus.config.properties;
 
 import com.zaxxer.hikari.HikariConfig;
+
 import lombok.Getter;
 import lombok.Setter;
 

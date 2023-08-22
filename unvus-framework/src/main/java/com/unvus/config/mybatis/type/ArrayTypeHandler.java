@@ -23,10 +23,15 @@
  */
 package com.unvus.config.mybatis.type;
 
+import java.sql.Array;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
-import java.sql.*;
 
 /**
  * Core handler for all array types based only on JDBC array types.

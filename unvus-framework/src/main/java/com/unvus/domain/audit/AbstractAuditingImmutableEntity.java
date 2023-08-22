@@ -1,14 +1,13 @@
 package com.unvus.domain.audit;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
-public class AbstractAuditingImmutableEntity implements Serializable {
+public interface AbstractAuditingImmutableEntity extends Serializable {
 
-    private Long createdBy;
+    Long getCreatedBy();
+    void setCreatedBy(Long createdBy);
 
-    private LocalDateTime createdDt = LocalDateTime.now();
+    LocalDateTime getCreatedDt();
+    void setCreatedDt(LocalDateTime createdDt);
 }

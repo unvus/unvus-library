@@ -23,16 +23,23 @@
  */
 package com.unvus.config.mybatis.type;
 
+import java.sql.CallableStatement;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 
-import java.sql.*;
-import java.time.LocalDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Map Java 8 LocalDate &lt;-&gt; java.sql.Date
  */
+@Slf4j
 @MappedTypes(LocalDate.class)
 public class LocalDateTypeHandler extends BaseTypeHandler<LocalDate> {
 
@@ -43,9 +50,13 @@ public class LocalDateTypeHandler extends BaseTypeHandler<LocalDate> {
 
     @Override
     public LocalDate getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        Date date = rs.getDate(columnName);
-        if (date != null) {
-            return date.toLocalDate();
+        try {
+            Date date = rs.getDate(columnName);
+            if (date != null) {
+                return date.toLocalDate();
+            }
+        }catch(Exception e) {
+            log.info(e.getMessage());
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package com.unvus.config.mybatis.customize;
 
 import com.fasterxml.jackson.databind.JavaType;
+
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.BaseTypeHandler;
 

@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.unvus</groupId>
         <artifactId>unvus-dependencies</artifactId>
-        <version>1.0.2</version>
+        <version>1.5.2-SNAPSHOT</version>
         <relativePath>../unvus-dependencies/pom.xml</relativePath>
     </parent>
 
     <artifactId>unvus-framework</artifactId>
-
     <packaging>jar</packaging>
-
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Server-side library used by applications created with the UnvUS generator</description>
     <url>https://unvus.com/</url>
-
-    <licenses>
-        <license>
-            <name>GNU General Public License version 3</name>
-            <url>https://opensource.org/licenses/gpl-3.0.html</url>
-        </license>
-    </licenses>
 
     <organization>
         <name>UnvUS</name>
@@ -42,31 +29,21 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/unvus/unvus-library.git</connection>
-        <developerConnection>scm:git:ssh://github.com:unvus/unvus-library.git</developerConnection>
-        <url>https://github.com/unvus/unvus-library</url>
-    </scm>
-
     <properties>
         <!--  (All inherited from parent.) -->
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>io.github.jhipster</groupId>
-            <artifactId>jhipster-framework</artifactId>
+            <groupId>com.unvus</groupId>
+            <artifactId>unvus-util</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
         </dependency>
 
         <dependency>
@@ -78,11 +55,18 @@
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -97,19 +81,25 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
+
 
         <!-- TODO 추후 mybatis 관련된 부분은 따로 프로젝트 분리 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.dynamic-sql</groupId>
+            <artifactId>mybatis-dynamic-sql</artifactId>
         </dependency>
 
         <dependency>
@@ -120,8 +110,67 @@
         <dependency>
             <groupId>org.lazyluke</groupId>
             <artifactId>log4jdbc-remix</artifactId>
-            <version>0.2.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>jackson-datatype-problem</artifactId>
+        </dependency>
+
+        <!-- 파일 업로드 -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.imageresizer4j</groupId>
+            <artifactId>imageresizer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.owasp.antisamy</groupId>
+            <artifactId>antisamy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!--// 파일 업로드 -->
+
     </dependencies>
 
     <build>
@@ -133,43 +182,47 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>test-goal</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
+                         <id>test-goal</id>
+                         <phase>generate-test-sources</phase>
+                         <goals>
+                             <goal>testCompile</goal>
+                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-javadoc-plugin</artifactId>-->
             <!--</plugin>-->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.projectKey>com.unvus:unvus-framework</sonar.projectKey>
+                <sonar.projectName>unvus-framework</sonar.projectName>
+                <sonar.projectVersion>1.5.2-SNAPSHOT</sonar.projectVersion>
+                <sonar.host.url>https://sonar.unvus.com</sonar.host.url>
+                <sonar.sources>src/main/</sonar.sources>
+                <sonar.exclusions>src/main/java/com/unvus/config/mybatis/customize/*.*</sonar.exclusions>
+            </properties>
+        </profile>
+    </profiles>
 </project>

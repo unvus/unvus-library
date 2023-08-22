@@ -16,4 +16,7 @@ public interface EnumCode {
         return null;
     }
 
+    default String getLabel() {
+        return null;
+    }
 }

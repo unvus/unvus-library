@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.unvus</groupId>
+        <artifactId>unvus-dependencies</artifactId>
+        <version>1.5.2-SNAPSHOT</version>
+        <relativePath>../unvus-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>unvus-util</artifactId>
+    <packaging>jar</packaging>
+    <name>UnvUS Util framework</name>
+    <description>Util library used by applications created with the UnvUS generator</description>
+    <url>https://unvus.com/</url>
+
+    <organization>
+        <name>UnvUS</name>
+        <url>https://unvus.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>guavatak</id>
+            <name>guava.tak</name>
+            <organization>UnvUS</organization>
+            <organizationUrl>https://unvus.com/</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <!--  (All inherited from parent.) -->
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-afterburner</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.projectKey>com.unvus:unvus-util</sonar.projectKey>
+                <sonar.projectName>unvus-util</sonar.projectName>
+                <sonar.projectVersion>1.5.2-SNAPSHOT</sonar.projectVersion>
+                <sonar.host.url>https://sonar.unvus.com</sonar.host.url>
+                <sonar.sources>src/main/</sonar.sources>
+            </properties>
+        </profile>
+    </profiles>
+</project>

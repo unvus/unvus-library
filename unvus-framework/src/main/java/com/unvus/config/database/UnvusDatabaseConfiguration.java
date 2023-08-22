@@ -1,21 +1,24 @@
 package com.unvus.config.database;
 
-
 import com.unvus.config.properties.DatabaseProperties;
+
+import java.util.Arrays;
+
+import javax.inject.Inject;
+import javax.sql.DataSource;
+
 import com.zaxxer.hikari.HikariConfig;
-import net.sf.log4jdbc.Log4jdbcProxyDataSource;
-import net.sf.log4jdbc.Spy;
-import net.sf.log4jdbc.tools.Log4JdbcCustomFormatter;
-import net.sf.log4jdbc.tools.LoggingType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
-import java.util.Arrays;
+import net.sf.log4jdbc.Log4jdbcProxyDataSource;
+import net.sf.log4jdbc.Spy;
+import net.sf.log4jdbc.tools.Log4JdbcCustomFormatter;
+import net.sf.log4jdbc.tools.LoggingType;
 
 public abstract class UnvusDatabaseConfiguration {
 
@@ -24,7 +27,6 @@ public abstract class UnvusDatabaseConfiguration {
     @Inject
     private Environment env;
 
-    @Bean
     public abstract DataSource dataSource();
 
 

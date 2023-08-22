@@ -11,7 +11,7 @@ public interface UnvusConstants {
 	String SPRING_PROFILE_PRODUCTION = "prod";
 
 	// pagination
-	String SKIP_PAGING = "SKIP_PAGING";
+	String USE_PAGING = "USE_PAGING";
 
 	String SKIP_COUNT = "skipCount";
 
@@ -23,13 +23,15 @@ public interface UnvusConstants {
 
 	String LINK_PER_PAGE = "linkPerPage";
 
-	String ORDER_BY = "orderBy";
+	String SORT_BY = "sortBy";
 
-	String ORDER_BY_LIST = "orderByList";
+	String SORT_BY_LIST = "sortByList";
 
-	Integer DEFAULT_DATA_PER_PAGE = 15;
+	Integer DEFAULT_DATA_PER_PAGE = 10;
 
 	Integer DEFAULT_PAGE_LINK_COUNT = 10;
 
-	String PAGER_TOOL = "pager";
+    String PAGER_TOOL = "pager";
+    String PAGE_MODEL = "_page_model";
+    String SORT_MODEL = "_sort_model";
 }

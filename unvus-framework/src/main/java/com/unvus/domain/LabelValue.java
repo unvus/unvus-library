@@ -1,9 +1,9 @@
 package com.unvus.domain;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Comparator;
+
+import lombok.Data;
 
 @Data
 public class LabelValue implements Comparable, Serializable {

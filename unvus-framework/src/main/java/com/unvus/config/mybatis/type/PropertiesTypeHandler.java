@@ -23,10 +23,6 @@
  */
 package com.unvus.config.mybatis.type;
 
-import org.apache.ibatis.type.BaseTypeHandler;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedTypes;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -35,6 +31,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * Denormalize your schema, using text fields to store your properties.

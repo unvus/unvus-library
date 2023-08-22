@@ -1,18 +1,28 @@
 package com.unvus.config.mybatis.pagination;
 
 import com.unvus.config.UnvusConstants;
+import com.unvus.pagination.*;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Method;
-import java.util.*;
 
 @Intercepts({
     @Signature(type = Executor.class, method="query", args={MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
@@ -51,15 +61,18 @@ public class PaginationInterceptor implements Interceptor {
 
         Pageable pageable = null;
 
+        PageModel pageModel = Pagination.pageModel.get();
+
         if(method != null) {
             pageable = method.getAnnotation(Pageable.class);
 
-            if (pageable != null) {
-                String skipPagingKey = pageable.skipPagingKey();
-                usePaging = perpareToPaging(params, skipPagingKey);
-            }else {
-                perpareToSort(params);
+            if(pageModel != null) {
+                if (pageable != null) {
+                    String usePagingKey = pageable.usePagingKey();
+                    usePaging = prepareToPaging(params, usePagingKey);
+                }
             }
+            prepareToSort(params);
         }
 
         Object result;
@@ -86,7 +99,7 @@ public class PaginationInterceptor implements Interceptor {
 
                 for(Map<String, Object> param : maps) {
                     param.put(pageable.mergeParamId(), mergeIdList);
-                    param.put(pageable.skipPagingKey(), true);
+                    param.put(pageable.usePagingKey(), false);
                 }
 
                 args[MAPPED_STATEMENT_INDEX] = originalMs;
@@ -101,7 +114,11 @@ public class PaginationInterceptor implements Interceptor {
             result = invocation.proceed();
         }
 
-        if(usePaging && Boolean.FALSE.equals(Pagination.skipCount.get())) {
+        if(pageModel != null && pageable != null) {
+            resetPaging(args, pageable.usePagingKey());
+        }
+
+        if(usePaging && Boolean.FALSE.equals(pageModel.isSkipCount())) {
 
             String cntMethodName = ms.getId() + "Cnt";
 
@@ -112,112 +129,134 @@ public class PaginationInterceptor implements Interceptor {
             MappedStatement countMs = ms.getConfiguration().getMappedStatement(cntMethodName);
 
             if(countMs != null) {
+                int resultCnt = 0;
 
-                args[MAPPED_STATEMENT_INDEX] = countMs;
-
-                List countResult = (List)invocation.proceed();
-
-                int resultCnt = (int)countResult.get(0);
-
-                try {
-                    Pagination.totalCnt.set(resultCnt);
-                } catch (Exception ignore) {
-                    Pagination.totalCnt.set(0);
-                }
-
-                if (result != null) {
-                    int idx = 1;
-                    int base = Pagination.totalCnt.get() - getFromData();
-                    for(Iterator it = ((List)result).iterator(); it.hasNext(); idx--) {
-                        Object obj = it.next();
-                        if(obj instanceof Countable) {
-                            Countable countable = (Countable)obj;
-                            countable.setPositionIdx(base + idx);
-                        }else if(obj instanceof Map) {
-                            ((Map)obj).put("positionIdx", base + idx);
+                if(result != null) {
+                    if(((List) result).size() < pageModel.getDataPerPage()) {
+                        if(pageModel.getCurrentPage().equals(1)) {
+                            resultCnt = ((List) result).size();
                         }else {
-                            break;
+                            resultCnt = (pageModel.getCurrentPage() - 1) * pageModel.getDataPerPage() + ((List) result).size();
                         }
+                    }else {
+                        args[MAPPED_STATEMENT_INDEX] = countMs;
+
+                        List countResult = (List)invocation.proceed();
+
+                        resultCnt = (int)countResult.get(0);
                     }
                 }
+
+                setCountResult(pageModel, result, resultCnt);
             }
 
         }
 
+        // 초기화
+        if(Boolean.TRUE.equals(Pagination.keepAsResult.get())) {
+            PaginationResult.pageModel.set(Pagination.pageModel.get());
+            PaginationResult.sortModel.set(Pagination.sortModel.get());
+        }
+
+        Pagination.reset();
+
         return result;
+    }
+
+    private void setCountResult(PageModel pageModel, Object result, int resultCnt) {
+        try {
+            pageModel.setTotalCnt(resultCnt);
+        } catch (Exception ignore) {
+            pageModel.setTotalCnt(0);
+        }
+
+        if (result != null) {
+            int idx = 1;
+            int base = pageModel.getTotalCnt() - getFromData(pageModel);
+            for(Iterator it = ((List) result).iterator(); it.hasNext(); idx--) {
+                Object obj = it.next();
+                if(obj instanceof Countable) {
+                    Countable countable = (Countable)obj;
+                    countable.setPositionIdx(base + idx);
+                }else if(obj instanceof Map) {
+                    ((Map)obj).put("positionIdx", base + idx);
+                }else {
+                    break;
+                }
+            }
+        }
     }
 
 
     /**
      * Perpare to paging.
      * @param args
-     * @param skipPagingKey
-     * @return
+     * @param usePagingKey
+     * @return use: true, skip: false
      */
     @SuppressWarnings("unchecked")
-    private boolean perpareToPaging(Object args, String skipPagingKey) {
+    private boolean prepareToPaging(Object args, String usePagingKey) {
+        PageModel pageModel = Pagination.pageModel.get();
+        SortModel sortModel = Pagination.sortModel.get();
         List<Map> maps = arrangeParams(args);
 
         if(maps.size() > 0) {
-            Map<String, Object> map = (Map<String, Object>)maps.get(0);
-            if(map.containsKey("fromData") && map.containsKey("toData")) {
-                return false;
-            }
 
-            if(map.containsKey(skipPagingKey) && Boolean.valueOf(map.get(skipPagingKey).toString())) {
-                return false;
-            }
-            if(Pagination.skipPaging.get() != null && Pagination.skipPaging.get()) {
-                return false;
-            }
+            if(pageModel != null
+                && pageModel.getDataPerPage() != null) {
 
-            Integer currentPage = Pagination.currentPage.get();
-            Integer dataPerPage = Pagination.dataPerPage.get();
-            List<OrderBy> orderByList = Pagination.orderBy.get();
-            List<String> projections = Pagination.projections.get();
+                Integer currentPage = pageModel.getCurrentPage();
+                Integer dataPerPage = pageModel.getDataPerPage();
 
-            if (currentPage == null) {
-                currentPage = 1;
-            }
-
-            if (dataPerPage == null) {
-                dataPerPage = UnvusConstants.DEFAULT_DATA_PER_PAGE;
-            }
-
-            int fromData = (dataPerPage * (currentPage - 1)) + 1;
-            int toData = fromData + dataPerPage - 1;
-
-            for(Map<String, Object> param : maps) {
-                param.put("fromData", fromData - 1);
-                param.put("toData", toData);
-                param.put("dataPerPage", dataPerPage);
-                param.put("currentPage", currentPage);
-
-                if(CollectionUtils.isNotEmpty(orderByList)){
-                    param.put("orderByList", orderByList);
+                if (currentPage == null) {
+                    currentPage = 1;
                 }
-                if(CollectionUtils.isNotEmpty(projections)){
-                    param.put("projections", projections);
-                    if(Boolean.TRUE.equals(Pagination.projectionToJoin.get())) {
-                        param.put("joinProjections", projections);
-                    }
+
+                if (dataPerPage == null) {
+                    dataPerPage = UnvusConstants.DEFAULT_DATA_PER_PAGE;
                 }
+
+                int fromData = (dataPerPage * (currentPage - 1)) + 1;
+                int toData = fromData + dataPerPage - 1;
+
+                for(Map<String, Object> param : maps) {
+                    param.put("_fromData", fromData - 1);
+                    param.put("_toData", toData);
+                    param.put("_dataPerPage", dataPerPage);
+                    param.put("_currentPage", currentPage);
+                    param.put(usePagingKey, true);
+                }
+                return true;
             }
-            return true;
         }
         return false;
 
     }
 
-    private void perpareToSort(Object args) {
+    private void prepareToSort(Object args) {
+        List<Map> maps = arrangeParams(args);
+        SortModel sortModel = Pagination.sortModel.get();
+
+        if(sortModel != null && maps.size() > 0) {
+            List<SortBy> orderByList = sortModel.getSortByList();
+            if(CollectionUtils.isNotEmpty(orderByList)){
+                for(Map<String, Object> param : maps) {
+                    param.put("_sortByList", orderByList);
+                }
+            }
+        }
+    }
+
+    private void resetPaging(Object args, String usePagingKey) {
         List<Map> maps = arrangeParams(args);
 
         if(maps.size() > 0) {
-            List<OrderBy> orderByList = Pagination.orderBy.get();
-            if(CollectionUtils.isNotEmpty(orderByList)){
-                for(Map<String, Object> param : maps) {
-                    param.put("orderByList", orderByList);
-                }
+            for(Map<String, Object> param : maps) {
+                param.remove("_fromData");
+                param.remove("_toData");
+                param.remove("_dataPerPage");
+                param.remove("_currentPage");
+                param.remove(usePagingKey);
             }
         }
     }
@@ -237,9 +276,9 @@ public class PaginationInterceptor implements Interceptor {
         return maps;
     }
 
-    private int getFromData() {
-        Integer currentPage = Pagination.currentPage.get();
-        Integer dataPerPage = Pagination.dataPerPage.get();
+    private int getFromData(PageModel page) {
+        Integer currentPage = page.getCurrentPage();
+        Integer dataPerPage = page.getDataPerPage();
 
         if (currentPage == null) {
             currentPage = 1;

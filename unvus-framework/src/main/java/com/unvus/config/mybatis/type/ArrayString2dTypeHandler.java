@@ -23,10 +23,10 @@
  */
 package com.unvus.config.mybatis.type;
 
-import org.apache.ibatis.type.MappedTypes;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * Multi dimensional array handler.

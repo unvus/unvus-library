@@ -23,9 +23,9 @@
  */
 package com.unvus.config.mybatis.type;
 
-import org.apache.ibatis.type.MappedTypes;
-
 import java.sql.Connection;
+
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * Map PostgreSQL array of longs(int8) to java Long[] array.

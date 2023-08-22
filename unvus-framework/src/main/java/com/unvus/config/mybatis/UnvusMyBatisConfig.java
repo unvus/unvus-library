@@ -1,15 +1,14 @@
 package com.unvus.config.mybatis;
 
-import com.unvus.config.mybatis.pagination.PaginationInterceptor;
-import org.apache.commons.lang3.ArrayUtils;
+import java.io.IOException;
+
+import javax.sql.DataSource;
+
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import javax.sql.DataSource;
-import java.io.IOException;
 
 public abstract class UnvusMyBatisConfig {
 

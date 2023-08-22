@@ -2,16 +2,17 @@ package com.unvus.config.mybatis.type;
 
 import com.unvus.config.mybatis.customize.BaseTypeAwareTypeHandler;
 import com.unvus.domain.EnumCode;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.type.Alias;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
-import org.apache.ibatis.type.MappedTypes;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.type.Alias;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
+import org.apache.ibatis.type.MappedTypes;
 
 /**
  * Created by guava on 16.8.17.
